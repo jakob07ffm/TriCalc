@@ -12,20 +12,32 @@ BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-point1 = (400, 100)  
-point2 = (300, 400)  
-point3 = (500, 400)  
+point1 = (450, 100)  
+point2 = (200, 400)  
+point3 = (700, 400)  
 triangle_points = [point1, point2, point3]
 
 font = pygame.font.Font(None, 32)
-user_text = ""
 
-input_rect = pygame.Rect(10, 10, 140, 32)
+a_text = "A  "
+b_text = "B  "
+c_text = "C  "
+a_user_text = ""
+b_user_text = ""
+c_user_text = ""
+
+a_input_rect = pygame.Rect(10, 10, 140, 32)
+b_input_rect = pygame.Rect(10, 50, 140, 32)
+c_input_rect = pygame.Rect(10, 90, 140, 32)
+
 input_color_active = pygame.Color("azure3")
 input_color_passive = pygame.Color("black")
-input_color = input_color_passive
 
-input_active = False
+a_input_color = input_color_passive
+b_input_color = input_color_passive
+c_input_color = input_color_passive
+
+input_active = None  
 
 running = True
 while running:
@@ -34,36 +46,61 @@ while running:
             running = False
             
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if input_rect.collidepoint(event.pos):
-                input_active = True
+            if a_input_rect.collidepoint(event.pos):
+                input_active = 'a'
+            elif b_input_rect.collidepoint(event.pos):
+                input_active = 'b'
+            elif c_input_rect.collidepoint(event.pos):
+                input_active = 'c'
             else: 
-                input_active = False
-                            
+                input_active = None
+
         if event.type == pygame.KEYDOWN:
-            if input_active:
+            if input_active == 'a':
                 if event.key == pygame.K_BACKSPACE:
-                    user_text = user_text[0:-1] # goes to last and deleats it
+                    a_user_text = a_user_text[0:-1]
                 else:
-                    user_text += event.unicode
+                    a_user_text += event.unicode
+            elif input_active == 'b':
+                if event.key == pygame.K_BACKSPACE:
+                    b_user_text = b_user_text[0:-1]
+                else:
+                    b_user_text += event.unicode
+            elif input_active == 'c':
+                if event.key == pygame.K_BACKSPACE:
+                    c_user_text = c_user_text[0:-1]
+                else:
+                    c_user_text += event.unicode
 
     win.fill(WHITE)
     
-    if input_active:
-        input_color = input_color_active
-    else:
-        input_color = input_color_passive
+    a_input_color = input_color_active if input_active == 'a' else input_color_passive
+    b_input_color = input_color_active if input_active == 'b' else input_color_passive
+    c_input_color = input_color_active if input_active == 'c' else input_color_passive
     
-    pygame.draw.rect(win, input_color, input_rect, 3)
+    pygame.draw.rect(win, a_input_color, a_input_rect, 3)
+    pygame.draw.rect(win, b_input_color, b_input_rect, 3)
+    pygame.draw.rect(win, c_input_color, c_input_rect, 3)
     
-    text_surface = font.render(user_text, True, BLACK)
-    win.blit(text_surface, (input_rect.x  + 5, input_rect.y + 5))
+    a_text_surface = font.render(a_text + a_user_text, True, BLACK)
+    b_text_surface = font.render(b_text + b_user_text, True, BLACK)
+    c_text_surface = font.render(c_text + c_user_text, True, BLACK)
     
-    input_rect.w = max(100, text_surface.get_width() + 10) #the biggest value is taken
     
-    pygame.draw.line(win, RED, point1, point2, 5) 
-    pygame.draw.line(win, GREEN, point2, point3, 5)  
-    pygame.draw.line(win, BLUE, point3, point1, 5) 
+    win.blit(font.render("a", True, BLACK), (575, 250))
     
+    win.blit(a_text_surface, (a_input_rect.x + 5, a_input_rect.y + 5))
+    win.blit(b_text_surface, (b_input_rect.x + 5, b_input_rect.y + 5))
+    win.blit(c_text_surface, (c_input_rect.x + 5, c_input_rect.y + 5))
+    
+    a_input_rect.w = max(100, a_text_surface.get_width() + 10)
+    b_input_rect.w = max(100, b_text_surface.get_width() + 10)
+    c_input_rect.w = max(100, c_text_surface.get_width() + 10)
+    
+    pygame.draw.line(win, RED, point1, point2, 5)
+    pygame.draw.line(win, GREEN, point2, point3, 5)
+    pygame.draw.line(win, BLUE, point3, point1, 5)
+
     pygame.display.flip()
 
 pygame.quit()
