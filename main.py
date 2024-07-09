@@ -17,7 +17,8 @@ point2 = (200, 400)
 point3 = (700, 400)  
 triangle_points = [point1, point2, point3]
 
-font = pygame.font.Font(None, 32)
+font_height = 32
+font = pygame.font.Font(None, font_height)
 
 a_text = "A  "
 b_text = "B  "
@@ -87,7 +88,47 @@ while running:
     c_text_surface = font.render(c_text + c_user_text, True, BLACK)
     
     
-    win.blit(font.render("a", True, BLACK), (575, 250))
+    pygame.draw.line(win, RED, point1, point2, 5)
+    pygame.draw.line(win, GREEN, point2, point3, 5)
+    pygame.draw.line(win, BLUE, point3, point1, 5)
+    
+    
+    # Get the midlle of a line for a 
+    length_a_x = point3[0] - point1[0]
+    half_length_a_x = length_a_x // 2
+    
+    length_a_y = point3[1] - point1[1]
+    half_length_a_y = length_a_y // 2
+    # Add that to the smaller cord 
+    middle_a_x = half_length_a_x + point1[0]
+    middle_a_y = half_length_a_y + point1[1]
+    
+    win.blit(font.render("a", True, BLACK), (middle_a_x, middle_a_y))
+    
+    ###B###
+    length_b_x = point1[0] - point2[0]
+    half_length_b_x = length_b_x // 2
+
+    length_b_y = point2[1] - point1[1]
+    half_length_b_y = length_b_y // 2
+    
+    middle_b_x = half_length_b_x + point2[0]
+    middle_b_y = half_length_b_y + point1[1]
+
+    win.blit(font.render("b", True, BLACK), (middle_b_x, middle_b_y))
+    
+    ###C###
+    length_c_x = point3[0] - point2[0]
+    half_length_c_x = length_c_x // 2
+
+    length_c_y = point3[1] - point2[1]
+    half_length_c_y = length_c_y // 2
+
+    middle_c_x = half_length_c_x + point2[0]
+    middle_c_y = half_length_c_y + point2[1]
+
+    win.blit(font.render("c", True, BLACK), (middle_c_x, middle_c_y))
+     
     
     win.blit(a_text_surface, (a_input_rect.x + 5, a_input_rect.y + 5))
     win.blit(b_text_surface, (b_input_rect.x + 5, b_input_rect.y + 5))
@@ -96,10 +137,6 @@ while running:
     a_input_rect.w = max(100, a_text_surface.get_width() + 10)
     b_input_rect.w = max(100, b_text_surface.get_width() + 10)
     c_input_rect.w = max(100, c_text_surface.get_width() + 10)
-    
-    pygame.draw.line(win, RED, point1, point2, 5)
-    pygame.draw.line(win, GREEN, point2, point3, 5)
-    pygame.draw.line(win, BLUE, point3, point1, 5)
 
     pygame.display.flip()
 
