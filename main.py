@@ -1,4 +1,5 @@
 import pygame
+import math
 
 pygame.init()
 
@@ -15,14 +16,13 @@ WHITE = (255, 255, 255)
 point1 = (450, 100)  
 point2 = (200, 400)  
 point3 = (700, 400)  
-triangle_points = [point1, point2, point3]
 
 font_height = 32
 font = pygame.font.Font(None, font_height)
 
-a_text = "A  "
-b_text = "B  "
-c_text = "C  "
+a_text = "a  "
+b_text = "b  "
+c_text = "c  "
 a_user_text = ""
 b_user_text = ""
 c_user_text = ""
@@ -73,7 +73,51 @@ while running:
                 else:
                     c_user_text += event.unicode
 
-    win.fill(WHITE)
+    win.fill(WHITE) 
+    
+    # Get the midlle of a line for a 
+    length_a_x = max(point3[0], point1[0]) - min(point3[0], point1[0]) #Takes the higher num - lower num
+    half_length_a_x = length_a_x // 2
+    
+    length_a_y = max(point3[1], point1[1]) - min(point3[1], point1[1])
+    half_length_a_y = length_a_y // 2
+    # Add that to the smaller cord 
+    middle_a_x = half_length_a_x + point1[0]
+    middle_a_y = half_length_a_y + point1[1]
+    
+    ###B###
+    length_b_x = max(point1[0], point2[0]) - min(point1[0], point2[0])
+    half_length_b_x = length_b_x // 2
+
+    length_b_y = max(point1[1], point2[1]) - min(point1[1], point2[1])
+    half_length_b_y = length_b_y // 2
+    
+    middle_b_x = half_length_b_x + point2[0]
+    middle_b_y = half_length_b_y + point1[1]
+    
+    ###C###
+    length_c_x = max(point3[0], point2[0]) - min(point3[0], point2[0])
+    half_length_c_x = length_c_x // 2
+
+    length_c_y = max(point3[1], point2[1]) - min(point3[1], point2[1])
+    half_length_c_y = length_c_y // 2
+
+    middle_c_x = half_length_c_x + point2[0]
+    middle_c_y = half_length_c_y + point2[1]
+    
+    a_length = math.sqrt((length_a_x)**2 + (length_a_y)**2)
+    b_length = math.sqrt((length_b_x)**2 + (length_b_y)**2)
+    c_length = math.sqrt((length_c_x)**2 + (length_c_y)**2)
+
+    print(a_length, b_length, c_length)
+
+    win.blit(font.render("a", True, BLACK), (middle_a_x, middle_a_y))
+    win.blit(font.render("b", True, BLACK), (middle_b_x, middle_b_y))
+    win.blit(font.render("c", True, BLACK), (middle_c_x, middle_c_y))
+    
+    pygame.draw.line(win, RED, point1, point2, 5)
+    pygame.draw.line(win, GREEN, point2, point3, 5)
+    pygame.draw.line(win, BLUE, point3, point1, 5)
     
     a_input_color = input_color_active if input_active == 'a' else input_color_passive
     b_input_color = input_color_active if input_active == 'b' else input_color_passive
@@ -86,49 +130,6 @@ while running:
     a_text_surface = font.render(a_text + a_user_text, True, BLACK)
     b_text_surface = font.render(b_text + b_user_text, True, BLACK)
     c_text_surface = font.render(c_text + c_user_text, True, BLACK)
-    
-    
-    pygame.draw.line(win, RED, point1, point2, 5)
-    pygame.draw.line(win, GREEN, point2, point3, 5)
-    pygame.draw.line(win, BLUE, point3, point1, 5)
-    
-    
-    # Get the midlle of a line for a 
-    length_a_x = point3[0] - point1[0]
-    half_length_a_x = length_a_x // 2
-    
-    length_a_y = point3[1] - point1[1]
-    half_length_a_y = length_a_y // 2
-    # Add that to the smaller cord 
-    middle_a_x = half_length_a_x + point1[0]
-    middle_a_y = half_length_a_y + point1[1]
-    
-    win.blit(font.render("a", True, BLACK), (middle_a_x, middle_a_y))
-    
-    ###B###
-    length_b_x = point1[0] - point2[0]
-    half_length_b_x = length_b_x // 2
-
-    length_b_y = point2[1] - point1[1]
-    half_length_b_y = length_b_y // 2
-    
-    middle_b_x = half_length_b_x + point2[0]
-    middle_b_y = half_length_b_y + point1[1]
-
-    win.blit(font.render("b", True, BLACK), (middle_b_x, middle_b_y))
-    
-    ###C###
-    length_c_x = point3[0] - point2[0]
-    half_length_c_x = length_c_x // 2
-
-    length_c_y = point3[1] - point2[1]
-    half_length_c_y = length_c_y // 2
-
-    middle_c_x = half_length_c_x + point2[0]
-    middle_c_y = half_length_c_y + point2[1]
-
-    win.blit(font.render("c", True, BLACK), (middle_c_x, middle_c_y))
-     
     
     win.blit(a_text_surface, (a_input_rect.x + 5, a_input_rect.y + 5))
     win.blit(b_text_surface, (b_input_rect.x + 5, b_input_rect.y + 5))
